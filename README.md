@@ -6,7 +6,7 @@
 
 ###
 
-Abstract: Being able to identify skin cancer from other skin benign lesions thought a classification algorithm has a potential of bringing lifesaving quick pre-diagnosis. This classification model can be inserted in devices to be used by clinicians and dermatologists or even mobile applications to be used directly by the patient. This project consists of enhancing images and preprocessing them in a fashion that features are highlighted and become more noticeable in order to be applied in a classification algorithm to differentiate between malignant and benign skin lesions.  
+Abstract: Being able to identify skin cancer from other skin benign lesions through a classification algorithm has a potential of bringing lifesaving quick pre-diagnosis. This classification model can be implemented into devices to be utilized by clinicians and dermatologists or even mobile applications to be used directly by  patients. This project consists of enhancing images and preprocessing them in a fashion that features are highlighted and become more noticeable in order to be applied in a classification algorithm to differentiate between malignant and benign skin lesions.
 
 Application: Medical Imaging
 
