@@ -1,4 +1,4 @@
-# Skin Cancer Image Enhancement and Classification
+# Sinusoidal noise removal
 ##### SCC5830
 
 #### Gabriel Gazetta de Araujo.  nº USP 10877911
@@ -19,10 +19,9 @@ For the input, I've researched and chosen the following images with sinusoidal p
 Processed Images without patterns.
 
 ### Methodology
-It can be said that noise is not easily removed in the space domain, which means that for this project, I intend to transform images to the frequency domain and plotting them. This plot is likely to permit observing high-frequency points in the image, with that, it is possible to create a filter that goes through the frequency domain and cancels out these high-frequency areas, removing patterns from the image. 
 
 * Step 1: Finding images with sinusoidal noise.
 * Step 2: Applying the Fourier transform in these images and observing their behavior in the frequency domain.
-* Step 3: Creating a band filter to apply gaussian, Butterworth and ideal knotch filters.
+* Step 3: Creating a stop-band filter to apply gaussian, Butterworth and ideal knotch filters.
 * Step 4: Plotting the resulting images and comparing the methods.
 
