@@ -4,7 +4,8 @@
 #### Gabriel Gazetta de Araujo.  nº USP 10877911
 
 ### Abstract:
-This final project aims to remove sinusoidal patterns from images. To do so, it is necessary to convert these images to the frequency domain through Fourier Transform in order to visualize and cancel out these high-frequency regions with specific filters.
+Images with patterned noises can be difficult to process or even to visualize. These patterns are high-frequency noises that scatter throughout the images. With that said, this final project aims to remove sinusoidal patterns from a set of images. In order to remove those patterns, it is necessary to convert the images to the frequency domain through Fourier Transform in order to visualize and cancel out those high-frequency regions with specific filters that cover the specific high-frequency areas in the image, resulting in an image with no pattern and little to no blur.
+
 
 #### Application: 
 Image Restoration - Pattern and noise removal
