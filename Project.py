@@ -1,28 +1,28 @@
 '''
-scc5830 - Image Processing
-Final Project
+SCC5830 - Image Processing Project
 2019 - 1st semester
 
-Image restoration: Sinusoidal noise removal
+Image restoration: Periodic noise removal
+Gabriel Gazetta - 10877911
  
 '''
+
+#read libraries
 import numpy as np
 from scipy.fftpack import fftn, ifftn, fftshift, ifft2
 import matplotlib.pyplot as plt
 import imageio
 from PIL import Image
+import matplotlib.image as mpimg
 
-
+#function to read image
 def get_img():
-    filename = str(input()).rstrip()
+    filename = str(input("Image address: ")).rstrip()
     img = imageio.imread(filename)
     return img
 
 
-img = get_img()
-plt.imshow(img, cmap = "gray")
-
-
+#function to convert image from space domain to frequency domain
 def spatialtofreq(img):
     m, n = img.shape
     diff = abs(m-n)
@@ -35,37 +35,68 @@ def spatialtofreq(img):
     nimg[:m,:n] = img
     ftimg = fftn(nimg) 
     ftimg = fftshift(ftimg)
-    #plt.imshow(np.real(nimg), cmap = "gray")
     return ftimg
 
-def butterWorthFilter(euclideand, cutofffrequency, bandwidth, order):
+# definition of butterworh band-reject mask
+def butterworth(euclideand, cutofffrequency, bandwidth, order):
+    try:
         result = 1/(1+((euclideand*bandwidth)/((euclideand**2)-(cutofffrequency**2)))**(2.*order))
+    except:
+        result = 1
     return result
 
-
-def gaussianFilter(euclideand, cutofffrequency, bandwidth):
-        result = 1-np.exp(-((euclideand**2-cutofffrequency**2)/(euclideand*bandwidth))**2)
+# definition of gaussian band-reject mask
+def gaussian(euclideand, cutofffrequency, bandwidth):
+    result = 1-np.exp(-((euclideand**2-cutofffrequency**2)/(euclideand*bandwidth))**2)
     return result
 
-def createBandFilter(m, n, type, cutofffrequency, bandwidth, order):
-    img = np.zeros((m,n))
+# function to calculate distance in notch filter
+def in_circle(x,y,u,v,r):
+    dist_from_center = np.sqrt(np.square(u-x) + np.square(v-y))
+    return(dist_from_center <= r)
+
+# ideal-notch filter
+def notch(filter, array, r):
+    for line in array:
+        x = line[0]
+        y = line[1]
+        for u in range(x-r,x+r+1):
+            for v in range(y-r,y+r+1):
+                if in_circle(u,v,x,y,r):
+                    try:
+                        if u>=0 or v>=0:
+                            filter[u,v] = 1
+                        else:
+                            pass
+                    except:
+                        pass
+    return filter
+
+#function that calls out the methods required and reads inputs.
+def Filter(img, type):
+    m,n = np.shape(img)
+    imgout = np.zeros((m,n))
     cx = np.floor(m/2)+1
     cy = np.floor(n/2)+1
-    for x in range(m):
-        for y in range(n):
-            euclideand = np.sqrt((x-cx)**2+(y-cy)**2)
-            if(type == "notch"):
-                img[x,y] = #quero por o notch aqui
-            elif(type == "butterworth"):
-                img[x,y] = butterWorthFilter(euclideand, cutofffrequency, bandwidth, order)
-            elif(type == "gaussian"):
-                img[x,y] = gaussianFilter(euclideand, cutofffrequency, bandwidth)
-    return img
-
-rejectBandFilter = createBandFilter(m, n, "gaussian", cutofffrequency, bandwidth, 2)
-plt.imshow(rejectBandFilter, cmap = "gray")
-
-
+    if(type == "notch"):
+                notches = np.array(eval(input("Insert array with coordinates ")))
+                r = int(input("Insert notch radius "))
+                imgout = notch(imgout, notches, r)
+                imgout = 1 - imgout
+    elif type == "butterworth" or "gaussian":
+        bandwidth = int(input("Bandwidth: "))
+        cutofffrequency = int(input("Cut-off Frequency: "))
+        order = int(input("Order: "))
+        for x in range(m):
+            for y in range(n):
+                euclideand = np.sqrt((x-cx)**2+(y-cy)**2)
+                if(type == "butterworth"):
+                    imgout[x,y] = butterworth(euclideand, cutofffrequency, bandwidth, order)
+                elif(type == "gaussian"):
+                    imgout[x,y] = gaussian(euclideand, cutofffrequency, bandwidth)
+    return imgout
+    
+#convert image from frequency domain back to spatial domain
 def freqtospatial(fimg, img):
     m, n = img.shape
     image = np.abs(ifft2(fimg))
@@ -73,27 +104,16 @@ def freqtospatial(fimg, img):
     crop_img = image[0:m, 0:n]
     return(crop_img)
 
-filteredImageRejectBandIdeal =freqtospatial(np.multiply(ftimg,rejectBandFilter),img)
-plt.imshow(filteredImageRejectBandIdeal, cmap = "gray"
+
+def main():
+    img = get_img()
+    ftimg = spatialtofreq(img)
+    type = (input("Insert type of filter: "))     
+    res_filter = Filter(img, type)
+    resulting_img = freqtospatial(np.multiply(ftimg,res_filter),img)
+    mpimg.imsave("result.png",resulting_img, cmap = "gray")
+    print("Image saved in folder.")
 
 
-
-def in_circle(x,y,u,v,r):
-    dist_from_center = np.sqrt(np.square(u-x) + np.square(v-y))
-    return(dist_from_center <= r)
-
-def insert_point_on_filter(filter, x, y, r):
-    for u in range(x-r,x+r+1):
-        for v in range(y-r,y+r+1):
-            if(in_circle(u,v,x,y,r)):
-                filter[u,v] = 0    
-    return filter
-
-
-filter = np.ones((100,100), dtype=np.uint8)
-
-filter = insert_point_on_filter(filter,25,25,8)
-
-
-plt.figure(); plt.imshow(filter); plt.title("result of filter")
-
+if __name__ == '__main__':
+    main()
