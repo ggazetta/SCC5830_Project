@@ -36,21 +36,25 @@ Periodic noises causes a range of problems in image visualization and even proce
 In this project, in order to remove noises the image was converted to the frequency domain throught a Fast Fourier Transform, and then plotted in the Fourier Spectra.
 
 ![Lena](/lena_corrupted.png)
+
 **Figure 1** - Image with periodic noise selected to be treated.
 
 
 ![Fourier Spectra](/Notebook/fourierspectra.png)
+
 **Figure 2** - Fourier Spectrum of the image above.
 
 The Fourier Spectrum can be used to identify the regions on the image responsible for the noises. On the image above, eight points can be identified. In order to remove those points. Two different approaches were addopted in this project.
 The first approach was to create a band-reject filter that creates a band on the frequency domain, and "rejects" the information inside that band. Two filters were adopted: butterworth and gaussian, the preferable is the butterworth, since it is possible to control the "sharpness" of the filter, by altering its order.
 
 ![Band-reject](/Notebook/band.png)
+
 **Figure 3** - Butterworth Band-reject filter.
 
 The second approach was to create a notch filter, which consists on selecting specific regions to "reject", or carve out. The results are images sharper and with more information than with images treated with band-reject filters, since they don't remove any info more than necessary.
 
 ![Notch](/Notebook/notches.png)
+
 **Figure 4** - Ideal Notch filter.
 
 
@@ -58,6 +62,14 @@ The second approach was to create a notch filter, which consists on selecting sp
 
 The following images were resulted from the filters:
 
+Band-reject             |  Notch
+:-------------------------:|:-------------------------:
+![](/Results/result_band_butterworth.png)  |  ![](/Results/resulting_img_notch.png)
+
+**Figure 4** - Comparison
+
+### Conclusion
+Although the images look similar, it can be noticed that the image on the right looks sharper and more detailed than the left one. That is due to the fact that a notch filter carves out as little as possible of the image, resulting in little to no loss in image information. Regarding that, it can be concluded that even though notch filters can take longer to point out the pixels, the result is better than a band-reject filter. In fact, notch filters can be the only option when treating very noisy images, in those cases, a band-reject filter would require a large width, causing the resulting image to lose too much information in a way that the result won't be satisfactory; because of that, in those cases, notch filters can be the only reasonable option.
 
 
 ### References:
