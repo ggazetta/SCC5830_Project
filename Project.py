@@ -14,6 +14,8 @@ import matplotlib.pyplot as plt
 import imageio
 from PIL import Image
 import matplotlib.image as mpimg
+import warnings
+warnings.filterwarnings("ignore")
 
 #function to read image
 def get_img():
@@ -24,25 +26,13 @@ def get_img():
 
 #function to convert image from space domain to frequency domain
 def spatialtofreq(img):
-    m, n = img.shape
-    diff = abs(m-n)
-    new_m, new_n = m, n
-    if(m > n):
-        new_n = n+diff
-    else:
-        new_m = m+diff  
-    nimg = np.zeros((new_m,new_n))
-    nimg[:m,:n] = img
-    ftimg = fftn(nimg) 
+    ftimg = fftn(img) 
     ftimg = fftshift(ftimg)
     return ftimg
 
 # definition of butterworh band-reject mask
 def butterworth(euclideand, cutofffrequency, bandwidth, order):
-    try:
-        result = 1/(1+((euclideand*bandwidth)/((euclideand**2)-(cutofffrequency**2)))**(2.*order))
-    except:
-        result = 1
+    result = 1/(1+((euclideand*bandwidth)/((euclideand**2)-(cutofffrequency**2)))**(2.*order))
     return result
 
 # definition of gaussian band-reject mask
@@ -86,7 +76,7 @@ def Filter(img, type):
     elif type == "butterworth" or "gaussian":
         bandwidth = int(input("Bandwidth: "))
         cutofffrequency = int(input("Cut-off Frequency: "))
-        order = int(input("Order: "))
+        order = int(input("Order (filter sharpness): "))
         for x in range(m):
             for y in range(n):
                 euclideand = np.sqrt((x-cx)**2+(y-cy)**2)
@@ -97,12 +87,10 @@ def Filter(img, type):
     return imgout
     
 #convert image from frequency domain back to spatial domain
-def freqtospatial(fimg, img):
-    m, n = img.shape
+def freqtospatial(fimg,):
     image = np.abs(ifft2(fimg))
     image = image.astype(np.uint8)
-    crop_img = image[0:m, 0:n]
-    return(crop_img)
+    return(image)
 
 
 def main():
@@ -110,7 +98,7 @@ def main():
     ftimg = spatialtofreq(img)
     type = (input("Insert type of filter: "))     
     res_filter = Filter(img, type)
-    resulting_img = freqtospatial(np.multiply(ftimg,res_filter),img)
+    resulting_img = freqtospatial(np.multiply(ftimg,res_filter))
     mpimg.imsave("result.png",resulting_img, cmap = "gray")
     print("Image saved in folder.")
 
