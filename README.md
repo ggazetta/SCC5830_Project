@@ -35,14 +35,34 @@ Periodic noises causes a range of problems in image visualization and even proce
 
 In this project, in order to remove noises the image was converted to the frequency domain throught a Fast Fourier Transform, and then plotted in the Fourier Spectra.
 
-[Lena](/lena_corrupted.png)
-[Fourier Spectra](/notebook/fourierspectra.png)
+![Lena](/lena_corrupted.png)
+**Figure 1** - Image with periodic noise selected to be treated.
 
+
+![Fourier Spectra](/Notebook/fourierspectra.png)
+**Figure 2** - Fourier Spectrum of the image above.
+
+The Fourier Spectrum can be used to identify the regions on the image responsible for the noises. On the image above, eight points can be identified. In order to remove those points. Two different approaches were addopted in this project.
+The first approach was to create a band-reject filter that creates a band on the frequency domain, and "rejects" the information inside that band. Two filters were adopted: butterworth and gaussian, the preferable is the butterworth, since it is possible to control the "sharpness" of the filter, by altering its order.
+
+![Band-reject](/Notebook/band.png)
+**Figure 3** - Butterworth Band-reject filter.
+
+The second approach was to create a notch filter, which consists on selecting specific regions to "reject", or carve out. The results are images sharper and with more information than with images treated with band-reject filters, since they don't remove any info more than necessary.
+
+![Notch](/Notebook/notches.png)
+**Figure 4** - Ideal Notch filter.
+
+
+### Results:
+
+The following images were resulted from the filters:
 
 
 
 ### References:
-* Cattin, Philippe. [Image Restoration](https://miac.unibas.ch/SIP/pdf/SIP-06-Restoration.pdf)
-* Lilienthal, Achim. [Noise Reduction](http://130.243.105.49/Research/MRO/courses/dip/2011/lectures/DIP_2011_L09.pdf)
-* GeoSpatial [Band-Reject Filter](https://www.harrisgeospatial.com/docs/BANDREJECT_FILTER.html)
+* [CUFF, Paul. Frequency Domain and Fourier Transforms. Princeton University](https://www.princeton.edu/~cuff/ele201/kulkarni_text/frequency.pdf)
+* [CATTIN, Philippe.Image Restoration. 2016.](https://miac.unibas.ch/SIP/pdf/SIP-06-Restoration.pdf)
+* [LILIENTHAL, Achim. Noise Reduction. Lecture Notes. 2011.](http://130.243.105.49/Research/MRO/courses/dip/2011/lectures/DIP_2011_L09.pdf)
+* [GeoSpatial. Band-Reject Filter](https://www.harrisgeospatial.com/docs/BANDREJECT_FILTER.html)
 
